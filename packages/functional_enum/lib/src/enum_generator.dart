@@ -17,9 +17,11 @@ class EnumExtensionGenerator {
 
   void _generateChecker(FieldElement e) {
     var name = e.name;
-    name = name.replaceRange(0, 1, name[0].toUpperCase());
-    final field = 'bool get is$name => this == ${element.name}.${e.name};';
-    _generated.writeln(field);
+    if (name != 'values') {
+      name = name.replaceRange(0, 1, name[0].toUpperCase());
+      final field = 'bool get is$name => this == ${element.name}.${e.name};';
+      _generated.writeln(field);
+    }
   }
 
   void _generateCheckers() => element.fields.forEach(_generateChecker);
