@@ -22,7 +22,7 @@ class EnumExtensionGenerator {
     _generated.writeln(field);
   }
 
-  void _generateCheckers() => element.fields.skip(2).forEach(_generateChecker);
+  void _generateCheckers() => element.fields.forEach(_generateChecker);
 
   void _generateExtensionBottom() => _generated.writeln('}');
 
@@ -46,8 +46,7 @@ class MethodGenerator {
   final _generated = StringBuffer();
   late MethodType _methodType;
 
-  MethodGenerator({required this.element})
-      : values = element.fields.skip(2).toList();
+  MethodGenerator({required this.element}) : values = element.fields.toList();
 
   String generate(MethodType type) {
     _initialize(type);
