@@ -1,5 +1,7 @@
 import 'package:analyzer/dart/element/element.dart';
 
+const _valuesFieldName = 'values';
+
 class EnumExtensionGenerator {
   final ClassElement element;
   final _generated = StringBuffer();
@@ -17,14 +19,14 @@ class EnumExtensionGenerator {
 
   void _generateChecker(FieldElement e) {
     var name = e.name;
-    if (name != 'values') {
-      name = name.replaceRange(0, 1, name[0].toUpperCase());
-      final field = 'bool get is$name => this == ${element.name}.${e.name};';
-      _generated.writeln(field);
-    }
+    name = name.replaceRange(0, 1, name[0].toUpperCase());
+    final field = 'bool get is$name => this == ${element.name}.${e.name};';
+    _generated.writeln(field);
   }
 
-  void _generateCheckers() => element.fields.forEach(_generateChecker);
+  void _generateCheckers() => element.fields
+      .where((element) => element.name != _valuesFieldName)
+      .forEach(_generateChecker);
 
   void _generateExtensionBottom() => _generated.writeln('}');
 
@@ -48,7 +50,10 @@ class MethodGenerator {
   final _generated = StringBuffer();
   late MethodType _methodType;
 
-  MethodGenerator({required this.element}) : values = element.fields.toList();
+  MethodGenerator({required this.element})
+      : values = element.fields
+            .where((element) => element.name != _valuesFieldName)
+            .toList();
 
   String generate(MethodType type) {
     _initialize(type);
