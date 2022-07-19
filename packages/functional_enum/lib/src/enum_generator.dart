@@ -25,7 +25,7 @@ class EnumExtensionGenerator {
   }
 
   void _generateCheckers() => element.fields
-      .where((element) => element.name != _valuesFieldName)
+      .where((element) => element.isEnumConstant)
       .forEach(_generateChecker);
 
   void _generateExtensionBottom() => _generated.writeln('}');
@@ -51,9 +51,8 @@ class MethodGenerator {
   late MethodType _methodType;
 
   MethodGenerator({required this.element})
-      : values = element.fields
-            .where((element) => element.name != _valuesFieldName)
-            .toList();
+      : values =
+            element.fields.where((element) => element.isEnumConstant).toList();
 
   String generate(MethodType type) {
     _initialize(type);
